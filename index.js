@@ -7,7 +7,7 @@ const api = new ParseServer({
     cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js', // chemin vers le fichier de cloud code
     appId: 'myAppId',
     masterKey: 'myMasterKey', // Gardez cette clé secrète
-    serverURL: 'http://localhost:1337/parse',  // Ne pas oublier de changer en https si nécessaire
+    serverURL: process.env.SERVER_URL || 'http://localhost:8080/parse',  // Ne pas oublier de changer en https si nécessaire
 });
 
 const app = express();
@@ -15,6 +15,8 @@ const app = express();
 // Serve the Parse API on the /parse URL prefix
 app.use('/parse', api);
 
-app.listen(1337, function() {
-    console.log('parse-server-example running on port 1337.');
+// Changer le port pour écouter sur 8080 ou le port défini par l'environnement
+const port = process.env.PORT || 8080;
+app.listen(port, function() {
+    console.log('parse-server-example running on port ' + port + '.');
 });

@@ -6,36 +6,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import prise.example.demo.model.ShellyData;
-import prise.example.demo.repository.ShellyDataRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import prise.example.demo.model.ShellyEclaiData;
+import prise.example.demo.repository.ShellyEclaiDataRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
-
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
-
+import java.util.ArrayList;
 
 @RestController
-public class ShellyDataController {
+@RequestMapping("/eclai") // Ajout d'un préfixe pour éviter les conflits
+public class ShellyEclaiDataController {
 
     @Autowired
-    private ShellyDataRepository shellyDataRepository;
+    private ShellyEclaiDataRepository shellyEclaiDataRepository;
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping("/data/day")
+    @RequestMapping("/data/eclai/day")
     @GetMapping()
-    public List<ShellyData> getDataByDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public List<ShellyEclaiData> getDataByDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         // Définir les limites de la journée (de minuit à 23h59)
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -49,11 +44,11 @@ public class ShellyDataController {
         calendar.add(Calendar.MILLISECOND, -1);
         Date end = calendar.getTime();
 
-        return shellyDataRepository.findByTimestampBetween(start, end);
+        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
     }
 
-    @GetMapping("/data/week")
-    public List<ShellyData> getDataByWeek(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    @GetMapping("/data/eclai/week")
+    public List<ShellyEclaiData> getDataByWeek(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         // Définir les limites de la semaine (du lundi 00:00 au dimanche 23:59)
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -68,11 +63,11 @@ public class ShellyDataController {
         calendar.add(Calendar.MILLISECOND, -1);
         Date end = calendar.getTime();
 
-        return shellyDataRepository.findByTimestampBetween(start, end);
+        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
     }
 
-    @GetMapping("/data/month")
-    public List<ShellyData> getDataByMonth(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM") Date date) {
+    @GetMapping("/data/eclai/month")
+    public List<ShellyEclaiData> getDataByMonth(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM") Date date) {
         // Définir les limites du mois (du premier jour 00:00 au dernier jour 23:59)
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -87,11 +82,11 @@ public class ShellyDataController {
         calendar.add(Calendar.MILLISECOND, -1);
         Date end = calendar.getTime();
 
-        return shellyDataRepository.findByTimestampBetween(start, end);
+        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
     }
-//http://20.123.48.27:8080/data/day?date=2024-06-2
+
     @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/data/energy/hourly")
+    @GetMapping("/data/eclai/energy/hourly")
     public List<Map<String, Object>> getHourlyEnergy(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         Map<String, Double> hourlyEnergy = new LinkedHashMap<>();
         List<Map<String, Object>> resultTable = new ArrayList<>();
@@ -115,20 +110,20 @@ public class ShellyDataController {
         System.out.println("End of Day: " + endOfDay);
 
         // Récupérer toutes les données de la journée
-        List<ShellyData> dataList = shellyDataRepository.findByTimestampBetween(start, endOfDay);
+        List<ShellyEclaiData> dataList = shellyEclaiDataRepository.findByTimestampBetween(start, endOfDay);
 
         if (dataList == null || dataList.isEmpty()) {
             return resultTable;
         }
 
         // Trier les données par timestamp
-        dataList.sort(Comparator.comparing(ShellyData::getTimestamp));
+        dataList.sort(Comparator.comparing(ShellyEclaiData::getTimestamp));
 
         // Log des données récupérées
         dataList.forEach(data -> System.out.println("Data: " + data.getTimestamp() + ", " + data.getTotalEnergy()));
 
         // Filtrer les relevés aux heures exactes (xx:59:59)
-        List<ShellyData> hourlyDataList = dataList.stream()
+        List<ShellyEclaiData> hourlyDataList = dataList.stream()
                 .filter(data -> {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(data.getTimestamp());
@@ -141,7 +136,7 @@ public class ShellyDataController {
 
         // Boucler à travers les relevés horaires pour calculer la consommation pour chaque heure
         for (int i = 1; i < hourlyDataList.size(); i++) {
-            ShellyData currentData = hourlyDataList.get(i);
+            ShellyEclaiData currentData = hourlyDataList.get(i);
             double currentEnergy = currentData.getTotalEnergy();
             double hourlyConsumption = currentEnergy - previousEnergy;
 
@@ -166,13 +161,4 @@ public class ShellyDataController {
 
         return resultTable;
     }
-
-
-
-
-
-
-
-
 }
-
