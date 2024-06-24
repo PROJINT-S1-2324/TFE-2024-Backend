@@ -27,63 +27,6 @@ public class ShellyBoilDataController {
     @Autowired
     private ShellyBoilDataRepository shellyBoilDataRepository;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping("/data/day")
-    @GetMapping()
-    public List<ShellyBoilData> getDataByDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        // Définir les limites de la journée (de minuit à 23h59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
-
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
-
-        return shellyBoilDataRepository.findByTimestampBetween(start, end);
-    }
-
-    @GetMapping("/data/week")
-    public List<ShellyBoilData> getDataByWeek(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        // Définir les limites de la semaine (du lundi 00:00 au dimanche 23:59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
-
-        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
-
-        return shellyBoilDataRepository.findByTimestampBetween(start, end);
-    }
-
-    @GetMapping("/data/month")
-    public List<ShellyBoilData> getDataByMonth(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM") Date date) {
-        // Définir les limites du mois (du premier jour 00:00 au dernier jour 23:59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
-
-        calendar.add(Calendar.MONTH, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
-
-        return shellyBoilDataRepository.findByTimestampBetween(start, end);
-    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/data/energy/hourly")

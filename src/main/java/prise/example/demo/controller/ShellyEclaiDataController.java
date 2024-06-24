@@ -22,69 +22,70 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/eclai") // Ajout d'un préfixe pour éviter les conflits
-public class ShellyEclaiDataController {
+public class  ShellyEclaiDataController {
 
     @Autowired
     private ShellyEclaiDataRepository shellyEclaiDataRepository;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @RequestMapping("/data/eclai/day")
-    @GetMapping()
-    public List<ShellyEclaiData> getDataByDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        // Définir les limites de la journée (de minuit à 23h59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
+    /*
+        @CrossOrigin(origins = "http://localhost:3000")
+        @RequestMapping("/data/eclai/day")
+        @GetMapping()
+        public List<ShellyEclaiData> getDataByDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+            // Définir les limites de la journée (de minuit à 23h59)
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date start = calendar.getTime();
 
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.MILLISECOND, -1);
+            Date end = calendar.getTime();
 
-        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
-    }
+            return shellyEclaiDataRepository.findByTimestampBetween(start, end);
+        }
 
-    @GetMapping("/data/eclai/week")
-    public List<ShellyEclaiData> getDataByWeek(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        // Définir les limites de la semaine (du lundi 00:00 au dimanche 23:59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
+        @GetMapping("/data/eclai/week")
+        public List<ShellyEclaiData> getDataByWeek(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+            // Définir les limites de la semaine (du lundi 00:00 au dimanche 23:59)
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date start = calendar.getTime();
 
-        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            calendar.add(Calendar.MILLISECOND, -1);
+            Date end = calendar.getTime();
 
-        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
-    }
+            return shellyEclaiDataRepository.findByTimestampBetween(start, end);
+        }
 
-    @GetMapping("/data/eclai/month")
-    public List<ShellyEclaiData> getDataByMonth(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM") Date date) {
-        // Définir les limites du mois (du premier jour 00:00 au dernier jour 23:59)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date start = calendar.getTime();
+        @GetMapping("/data/eclai/month")
+        public List<ShellyEclaiData> getDataByMonth(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM") Date date) {
+            // Définir les limites du mois (du premier jour 00:00 au dernier jour 23:59)
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date start = calendar.getTime();
 
-        calendar.add(Calendar.MONTH, 1);
-        calendar.add(Calendar.MILLISECOND, -1);
-        Date end = calendar.getTime();
+            calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.MILLISECOND, -1);
+            Date end = calendar.getTime();
 
-        return shellyEclaiDataRepository.findByTimestampBetween(start, end);
-    }
-
+            return shellyEclaiDataRepository.findByTimestampBetween(start, end);
+        }
+    */
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/data/eclai/energy/hourly")
     public List<Map<String, Object>> getHourlyEnergy(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
