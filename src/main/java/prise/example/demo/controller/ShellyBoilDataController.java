@@ -71,6 +71,11 @@ public class ShellyBoilDataController {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(data.getTimestamp());
                     return cal.get(Calendar.MINUTE) == 59 && cal.get(Calendar.SECOND) == 59;
+
+                    /* return (cal.get(Calendar.MINUTE) == 59 && cal.get(Calendar.SECOND) == 59) ||
+                   (cal.get(Calendar.MINUTE) == 58 && cal.get(Calendar.SECOND) == 59);
+
+                     */
                 })
                 .collect(Collectors.toList());
 
@@ -104,4 +109,8 @@ public class ShellyBoilDataController {
 
         return resultTable;
     }
+
+
+
+
 }

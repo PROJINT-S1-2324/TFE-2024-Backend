@@ -92,6 +92,7 @@ public class ShellyDataController {
         }
         */
 //http://20.123.48.27:8080/data/day?date=2024-06-2
+
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/data/energy/hourly")
     public List<Map<String, Object>> getHourlyEnergy(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
@@ -135,6 +136,11 @@ public class ShellyDataController {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(data.getTimestamp());
                     return cal.get(Calendar.MINUTE) == 59 && cal.get(Calendar.SECOND) == 59;
+
+                    /* return (cal.get(Calendar.MINUTE) == 59 && cal.get(Calendar.SECOND) == 59) ||
+                   (cal.get(Calendar.MINUTE) == 58 && cal.get(Calendar.SECOND) == 59);
+
+                     */
                 })
                 .collect(Collectors.toList());
 
